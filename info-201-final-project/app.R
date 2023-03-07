@@ -9,6 +9,7 @@
 
 library(shiny)
 library(tidyverse)
+library(plotly)
 
 # Statically load in the datasets
 demographics <- read_delim("../data/demographics.csv")
@@ -109,11 +110,21 @@ ui <- fluidPage(
       
       sidebarLayout(
         sidebarPanel(
-          p("This is a placeholder sidebar panel.")
+          p("This slider allows you to select the year of the data."),
+          sliderInput("yrp2", "Year:",
+                      min = 1960,
+                      max = 2019,
+                      value = 2000)
         ),
         
         mainPanel(
-          p("This is a placeholder main panel.")
+          p("This table shows a comparison of GDP per capita and CO2 
+            emissions per capita (in metric tons of CO2). The data is meant 
+            to elucidate the relationship between wealth and unsustainability. 
+            Over the years, the meaning of wealth in the context of sustainability
+            has shifted from having the resources to industrialize, to having 
+            the resources to be more sustainable."),
+          plotlyOutput("p2plot")
         )
       )
     ),
@@ -144,8 +155,22 @@ ui <- fluidPage(
 
 # Define server logic
 server <- function(input, output) {
-  
-}
 
+  
+  p2yrly <- reactive({
+    p222 <- combined %>%
+      filter(time %in% input$yrp2)  
+  })
+  output$p2plot <- renderPlotly({
+    plot_ly(data = p2yrly(),
+            x = ~GDP_PC, y = ~co2_PC, color = ~region,
+            marker = list(size = 10),
+            type = 'scatter',
+            mode = 'markers',
+            xaxis = list(title = 'GDP Per Capita (USD)'), 
+            yaxis = list(title = 'CO2 Emissions Per Capita (Metric Tons)')
+            )  
+})
+}
 # Run the application 
 shinyApp(ui = ui, server = server)
