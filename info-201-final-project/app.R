@@ -32,9 +32,12 @@ spending <- spending %>%
   # (Makes grouping/filtering easier)
   pivot_longer(
     cols = matches("[0-9]{4}"),
-    names_to = "year",
+    names_to = "time",
     values_to = "spending"
   ) %>%
+  
+  # Change "time" variable to double to match other datasets
+  mutate(time = as.double(time)) %>%
   
   # Now remove any missing observations
   filter(!is.na(spending))
@@ -50,18 +53,29 @@ economic <- economic %>%
     indicator = "Indicator",
     iso3 = "LOCATION",
     name = "Country",
-    year = "Time",
+    time = "Time",
     value = "Value"
   ) %>%
   
   # Pivot wider so that there aren't as many duplicated observations
   pivot_wider(
-    id_cols = c(iso3, name, year),
+    id_cols = c(iso3, name, time),
     names_from = indicator,
     values_from = value
   )
 
-print(economic)
+# Finally, join them together to make a combined dataset
+combined <- full_join(
+  demographics,
+  economic,
+  c("iso3", "time")
+)
+
+combined <- full_join(
+  combined,
+  spending,
+  c("iso3", "time")
+)
 
 # Define UI for application
 ui <- fluidPage(
