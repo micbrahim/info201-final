@@ -104,6 +104,9 @@ ui <- fluidPage(
         its data from the World Health Organization's Global Health Expenditure database. 
         This data is found ",
         a("here", .noWS = "outside", href = "https://data.worldbank.org/indicator/SH.XPD.GHED.PP.CD"),
+        ". Another part of the data comes from the Gapminder dataset, which is a conglomeration 
+        of multiple indicators, and is found ",
+        a("here", .noWS = "outside", href = "https://www.gapminder.org/data/"),
         "."),
       h1("Dataset Sample"),
       p("Below is a random sample from the cleaned up and processed dataset. 
