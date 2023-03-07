@@ -77,6 +77,10 @@ combined <- full_join(
   c("iso3", "time")
 )
 
+# Turn double year values into integers
+combined <- combined %>%
+  mutate(time = as.integer(time))
+
 # Define UI for application
 ui <- fluidPage(
   # Break up UI into multiple tabs
@@ -85,7 +89,29 @@ ui <- fluidPage(
     tabPanel(
       title = "Overview",
       
-      p("This is a placeholder overview page.")
+      h1("Goals"),
+      p("The goals of our application are to provide individuals and 
+        policymakers with data that will allow them to make connections 
+        between countries' general spending on health, and how it may influence 
+        various socioeconomic and demographic indicators. We hope that it will
+        be used to make evidence-based policy decisions that improve health outcomes 
+        for countries."),
+      h1("Data Sources"),
+      p("Part of the data comes from UNESCO's demographic and socio-economic 
+        indicators dataset, found ",
+        a("here", .noWS = "outside", href = "http://data.uis.unesco.org/Index.aspx?DataSetCode=demo_ds#"),
+        ". Another part of the data comes from the World Bank's website, which sourced 
+        its data from the World Health Organization's Global Health Expenditure database. 
+        This data is found ",
+        a("here", .noWS = "outside", href = "https://data.worldbank.org/indicator/SH.XPD.GHED.PP.CD"),
+        "."),
+      h1("Dataset Sample"),
+      p("Below is a random sample from the cleaned up and processed dataset. 
+        Note that each observation is identified by country and year, and the data 
+        from the three datasets has been joined on these identifiers in a wide format. 
+        Note that there may be missing values for some variables, especially those that 
+        are outside of 2000-2019."),
+      tableOutput("overview_table")
     ),
     
     # Second panel, interactive page
@@ -145,6 +171,13 @@ ui <- fluidPage(
 # Define server logic
 server <- function(input, output) {
   
+  # Get random sample of the dataset for the overview page
+  output$overview_table <- renderTable({
+    combined %>%
+      slice_sample(n = 5) %>%
+      select("iso3", "name.x", "time", "lifeExpectancy",
+             "childMortality", "spending", "GDP growth (annual %)")
+  })
 }
 
 # Run the application 
