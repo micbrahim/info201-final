@@ -17,13 +17,14 @@ spending <- read_delim("../data/governmentspending.csv")
 
 # Clean up spending dataset
 spending <- spending %>%
+  
   # Only keep variables with actual data
   select("Country Name", "Country Code", "2000":"2019") %>%
   
   # Also change names for ease of use
   rename(
     name = "Country Name",
-    code = "Country Code"
+    iso3 = "Country Code"
   ) %>%
   
   # Pivot the data so that each row is an observation
@@ -38,7 +39,29 @@ spending <- spending %>%
   # Now remove any missing observations
   filter(!is.na(spending))
 
-print(spending)
+# Clean up economic dataset
+economic <- economic %>%
+  
+  # Keep only useful variables
+  select("Indicator", "LOCATION", "Country", "Time", "Value") %>%
+  
+  # Rename variables for clarity
+  rename(
+    indicator = "Indicator",
+    iso3 = "LOCATION",
+    name = "Country",
+    year = "Time",
+    value = "Value"
+  ) %>%
+  
+  # Pivot wider so that there aren't as many duplicated observations
+  pivot_wider(
+    id_cols = c(iso3, name, year),
+    names_from = indicator,
+    values_from = value
+  )
+
+print(economic)
 
 # Define UI for application
 ui <- fluidPage(
