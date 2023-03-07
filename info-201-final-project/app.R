@@ -166,7 +166,8 @@ server <- function(input, output) {
             x = ~GDP_PC, y = ~co2_PC, color = ~region,
             marker = list(size = 10),
             type = 'scatter',
-            mode = 'markers',
+            mode = 'markers') %>% 
+            layout(
             xaxis = list(title = 'GDP Per Capita (USD)'), 
             yaxis = list(title = 'CO2 Emissions Per Capita (Metric Tons)')
             )  
