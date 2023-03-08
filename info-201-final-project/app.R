@@ -124,6 +124,8 @@ ui <- fluidPage(
       
       sidebarLayout(
         sidebarPanel(
+          p("This chart checks to see if there is any correlation between the life expectancy and GDP (Gross Domestic Product) per capita of a certain country, sorted by their region.
+            Choose any year from 2000-2019, as that is when the most amount of data is available in the respective datasets"),
           sliderInput("gdpvs", "Year: ",
                       min = 2000,
                       max = 2019,
@@ -272,7 +274,7 @@ server <- function(input, output) {
     )
   })
 
-  #Code for
+  #Graph for interactive 1
   gdpvs <- reactive({
     filter(combined, time %in% input$gdpvs)
   })
@@ -290,7 +292,7 @@ server <- function(input, output) {
   })
 
 
-  
+# Graph for interactive 2
   p2yrly <- reactive({
     p222 <- combined %>%
       filter(time %in% input$yrp2)  
