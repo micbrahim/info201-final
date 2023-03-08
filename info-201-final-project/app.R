@@ -198,7 +198,26 @@ ui <- fluidPage(
     tabPanel(
       title = "Conclusion",
       
-      p("This is a placeholder conclusion page.")
+      h1("Insights"),
+      p("This is a placeholder insight."),
+      h1("Data Quality"),
+      p("Our dataset was of reasonable quality, as each of the individual 
+        datasets that comprised it did not have may missing values, but when 
+        joined together, some observations are missing many values for a lot of variables. 
+        Some of the values may be biased in that most of the variables tend to focus 
+        on economic indicators and demographic indicators, but there was not a lot of focus 
+        on more personal indicators (such as satisfaction with the healthcare system, ease 
+        of healthcare access, etc.) that might indicate how citizens are personally impacted 
+        by healthcare expenditures. Because the data is currently at such a large scale, there is 
+        not much concern that its usage will harm any particular groups."),
+      h1("Future Exploration"),
+      p("Future enhancements to the project could include more indicators as previously 
+        mentioned, and could also acquire more specific breakdowns of countries' healthcare 
+        expenditures to see if different types have different effects. Additionally, 
+        regression models could be added to predict how future policies and expenditures 
+        could impact indicators. Finally, further enhancements could involve enhancing the 
+        existing data to have less missing observations, less redundant variables, 
+        and more thoroughly explained and clear indicator variables.")
     )
   )
   
@@ -237,7 +256,8 @@ server <- function(input, output) {
       scale_color_manual(values = c("#E69F00", "#F0E442", "#0072B2", "#D55E00", "#009E73")) +
       labs(x = "Domestic General Government Health Expenditure P.C., PPP (current international $)",
            y = input$indicator3,
-           color = "Region")
+           color = "Region",
+           title = paste(input$indicator3, "vs. General Government Health Expenditure"))
   })
   
   # Correlation logic for interactive 3
