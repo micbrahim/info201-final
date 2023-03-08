@@ -168,11 +168,28 @@ ui <- fluidPage(
       
       sidebarLayout(
         sidebarPanel(
-          p("This is a placeholder sidebar panel.")
+          p("This chart attempts to demonstrate whether there are any 
+            meaningful correlations between a country's health expenditures 
+            and various indicators of wellbeing, and, if so, how these correlations 
+            may vary between specific countries or based on other factors."),
+          checkboxInput("average3", "Average over year?"),
+          sliderInput("year3",
+                       "Year:",
+                       value = 2000,
+                       min = 2000,
+                       max = 2019,
+                       step = 1,
+                       sep = ""
+                       ),
+          selectInput("indicator3",
+                      "Select indicator:",
+                      sort(colnames(combined))[-c(32:34, 36:38, 44:48)]
+                      )
         ),
         
         mainPanel(
-          p("This is a placeholder main panel.")
+          plotOutput("plot3"),
+          textOutput("correlation3")
         )
       )
     ),
@@ -189,6 +206,51 @@ ui <- fluidPage(
 
 # Define server logic
 server <- function(input, output) {
+  
+  # Logic for interactive 3
+  health_data <- reactive({
+    
+    result <- combined %>%
+      
+      # First filter out any observations with no spending data
+      filter(!is.na(spending)) %>%
+      
+      filter(!is.na(get(input$indicator3)))
+      
+    if (input$average3) {
+      result <- result %>% group_by(iso3, region) %>% summarize(spending = mean(spending), blah = mean(get(input$indicator3)))
+    } else {
+      result <- result %>% filter(time == input$year3)
+    }
+    
+    result
+  })
+  
+  # Plot logic for interactive 3
+  output$plot3 <- renderPlot({
+    health_data() %>%
+      ggplot(aes(x = spending,
+                 y = if (!input$average3) get(input$indicator3) else blah,
+                 color = region)) +
+      geom_point() +
+      scale_x_log10() + 
+      scale_color_manual(values = c("#E69F00", "#F0E442", "#0072B2", "#D55E00", "#009E73")) +
+      labs(x = "Domestic General Government Health Expenditure P.C., PPP (current international $)",
+           y = input$indicator3,
+           color = "Region")
+  })
+  
+  # Correlation logic for interactive 3
+  output$correlation3 <- renderText({
+    paste(
+      sep = "",
+      "The correlation between ",
+      input$indicator3,
+      " and general domestic health expenditures is ",
+      cor(health_data()$spending, if (!input$average3) health_data()[[input$indicator3]] else health_data()$blah),
+      "."
+    )
+  })
 
   #Code for
   gdpvs <- reactive({
