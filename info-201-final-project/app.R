@@ -124,11 +124,15 @@ ui <- fluidPage(
       
       sidebarLayout(
         sidebarPanel(
-          p("This is a placeholder sidebar panel.")
+          sliderInput("gdpvs", "Year: ",
+                      min = 2000,
+                      max = 2019,
+                      value = 2000)
+          
         ),
         
         mainPanel(
-          p("This is a placeholder main panel.")
+          plotOutput("scatterplot")
         )
       )
     ),
@@ -180,11 +184,21 @@ ui <- fluidPage(
       p("This is a placeholder conclusion page.")
     )
   )
+  
 )
 
 # Define server logic
 server <- function(input, output) {
 
+  #Code for
+  gdpvs <- reactive({
+    filter(combined, time %in% input$gdpvs)
+  })
+  output$scatterplot <- renderPlot({
+    ggplot(gdpvs(), aes(x = GDP_PC, y = lifeExpectancy, color = region)) +
+      geom_point() +
+      labs(title = "GDP per capita vs. life expectancy", x = "GDP per capita (USD)", y = "Life expectancy (Years)")
+  })
   # Get random sample of the dataset for the overview page
   output$overview_table <- renderTable({
     combined %>%
