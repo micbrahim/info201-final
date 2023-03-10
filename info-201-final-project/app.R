@@ -12,9 +12,9 @@ library(tidyverse)
 library(plotly)
 
 # Statically load in the datasets
-demographics <- read_delim("../data/demographics.csv")
-economic <- read_delim("../data/economic.csv")
-spending <- read_delim("../data/governmentspending.csv")
+demographics <- read_delim("data/demographics.csv")
+economic <- read_delim("data/economic.csv")
+spending <- read_delim("data/governmentspending.csv")
 
 # Clean up spending dataset
 spending <- spending %>%

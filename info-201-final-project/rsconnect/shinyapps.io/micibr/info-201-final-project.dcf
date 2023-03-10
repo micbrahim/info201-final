@@ -1,0 +1,14 @@
+name: info-201-final-project
+title: info-201-final-project
+username:
+account: micibr
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8537579
+bundleId: 6943212
+url: https://micibr.shinyapps.io/info-201-final-project/
+when: 1678479716.7041
+lastSyncTime: 1678479716.70411
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data/.DS_Store
