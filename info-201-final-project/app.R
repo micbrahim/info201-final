@@ -158,7 +158,8 @@ ui <- fluidPage(
             to elucidate the relationship between wealth and unsustainability. 
             Over the years, the meaning of wealth in the context of sustainability
             has shifted from having the resources to industrialize, to having 
-            the resources to be more sustainable."),
+            the resources to be more sustainable. This data was sourced from
+            the gapminder dataset."),
           plotlyOutput("p2plot")
         )
       )
@@ -297,11 +298,13 @@ server <- function(input, output) {
     p222 <- combined %>%
       filter(time %in% input$yrp2)  
   })
+
   output$p2plot <- renderPlotly({
     plot_ly(data = p2yrly(),
             x = ~GDP_PC, y = ~co2_PC, color = ~region,
-            marker = list(size = 10),
+            marker = list(size = 5),
             type = 'scatter',
+            text = ~iso3,
             mode = 'markers') %>% 
             layout(
             xaxis = list(title = 'GDP Per Capita (USD)'), 
