@@ -200,9 +200,13 @@ ui <- fluidPage(
     # Final panel, conclusions and takeaways
     tabPanel(
       title = "Conclusion",
-      
+      img(alt = "literacy graph", src = 'literacygraph.png', style="float:right", width = "450", height = "300"),
       h1("Insights"),
-      p("This is a placeholder insight."),
+      p("One notable insight/pattern that we discovered through our project was that generally,
+        with the increase of governmental health expenditiure, various indicators of a countries'
+        wellbeing increase as well. Even though this is a pattern we saw, there were also some definite outliers. 
+        One example of this includes the Adult Literacy vs General Govenment Health Expenditure graph, where you can
+        see a couple countries that spend the least amount of money on health have some of the highest rates of literacy."),
       h1("Data Quality"),
       p("Our dataset was of reasonable quality, as each of the individual 
         datasets that comprised it did not have may missing values, but when 
